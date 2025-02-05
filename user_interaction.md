@@ -1,7 +1,7 @@
 # Wanted components
 Lightweight LED displays for Raspberry Pi x3 - for instance, the PIM715 Pimorono Pico display pack (which each require a Raspberry Pi Pico)
 
-Hitech HSR-2645CR Standard Digital Cored Servo (or similar) x8 for two arms, of 4 for 1 arm
+Parallax Inc 4 → 6 V 140 mA Servo Motor (or similar) x8 for two arms, of 4 for 1 arm
 
 Raspberry Pi 5 x1
 

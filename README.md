@@ -4,7 +4,7 @@ Things to add to this repo!
 - A team photo
 - A copy of your manifesto
 
-Team members:
+Team members:  
 Archie Preston  
 Daniel Diamand  
 Jonah Oliver  

@@ -5,8 +5,8 @@ Things to add to this repo!
 - A copy of your manifesto
 
 Team members:
-Archie Preston
-Daniel Diamand
-Jonah Oliver
-Mohamed Hesham
-Yuna Kim
+Archie Preston  
+Daniel Diamand  
+Jonah Oliver  
+Mohamed Hesham  
+Yuna Kim  

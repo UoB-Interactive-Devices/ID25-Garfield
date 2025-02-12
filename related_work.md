@@ -11,3 +11,9 @@ https://link.springer.com/content/pdf/10.1007/s10846-018-0860-2.pdf
 https://dl.acm.org/doi/10.1145/3677846.3677848  
 -BSL  
 -Webcam captures gestures processed with CNN and gives a score  
+## The Effect of Embodiment in Sign Language Tutoring with Assistive Humanoid Robots
+https://link.springer.com/article/10.1007/s12369-015-0311-1
+-TSL (Turkkish sign Language)
+- Uses Nao H25 and a Robovie R3 humanoid 
+- Nao H25 costs $12,000
+- Robovie R3 costs $40,000

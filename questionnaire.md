@@ -12,6 +12,9 @@
 ## Testing Functionality 
 -Given to BSL speakers  
 -To test words/phrases created  
- -Do you understand this sign as **[word]** ?  
- -What would you guess that this sign is trying to say?  
- -How confident are you in your answer on a scale of 1-10?  
+ -Do you understand this sign as **[word]** ?(y/n)  
+ -What would you guess that this sign is trying to say? **(open)**   
+ -How confident are you in your answer on a scale of 1-10? **(1-10)**   
+ -Do you think another BSL speaker would understand this sign as **[word]**?**(y/n)**  
+ -Do you think a beginner could learn the sign for **[word]** from this demonstration? **(y/n)**  
+ -How could the demonstration of this sign be improved? **(open)**

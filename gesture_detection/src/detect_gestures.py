@@ -150,15 +150,15 @@ def detect_signs(gestures, detect_period=None):
         "null" : -1,
         "exit" : 3.7, #/
         "teacher" : 5.5, #/
-        "how_are_you": 4.2,
-        "robot" : -1                 
+        "how_are_you": 0.48,
+        "start" : 0.25    
     }
     gesture_periods = {
         "null" : 10,
         "exit" : 0.2,
         "teacher" : 0.2,
         "how_are_you": 0.2,
-        "robot" : 501                   
+        "start" : 0.1,          
     }
     
     gestures = [all_gestures[gesture] for gesture in gestures]
@@ -169,6 +169,6 @@ def detect_signs(gestures, detect_period=None):
 if __name__ == "__main__":
     # Example: detect signs with their threshold scores and required periods
     # Format: (gesture_name, max_score_threshold, period_in_seconds)
-    gestures = [ "exit", "how_are_you"]
+    gestures = [ "null", "how_are_you"]
     result = detect_signs(gestures, None)  # Run indefinitely
     print(f"Detection result: {result}")

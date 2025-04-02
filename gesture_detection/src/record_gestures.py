@@ -56,22 +56,20 @@ def record_gesture(name, filename, one_handed=False):
         if key == ord('q'):
             gesture.save_as_json(filename)
             break
-            
-        if results.multi_hand_landmarks:
-            if key == ord('a'):
-                if is_recording:
-                    gesture.add_recording(recording)
-                    recording = GestureRecording()
-                    print("STOPPED recording")
-                    is_recording = False
-                else:
-                    print("Recording in: " + str(COUNT_DOWN))
-                    for i in range(COUNT_DOWN, 0, -1):
-                        time.sleep(1)
-                        print(i)
-                    print("STARTED recording!")
-                    is_recording = True
-        
+        if key == ord('a'):
+            if is_recording:
+                gesture.add_recording(recording)
+                recording = GestureRecording()
+                print("STOPPED recording")
+                is_recording = False
+            else:
+                print("Recording in: " + str(COUNT_DOWN))
+                for i in range(COUNT_DOWN, 0, -1):
+                    time.sleep(1)
+                    print(i)
+                print("STARTED recording!")
+                is_recording = True
+        n
         # maintain FPS
         elapsed_frame = time.time() - frame_start
         time.sleep(max(0, FRAME_TIME - elapsed_frame))
@@ -80,4 +78,6 @@ def record_gesture(name, filename, one_handed=False):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    record_gesture("wave", "wave", one_handed=True)
+    name = input("Name the gesture:")
+
+    record_gesture(name, name, one_handed=False)

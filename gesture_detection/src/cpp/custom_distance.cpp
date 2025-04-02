@@ -6,16 +6,18 @@ namespace py = pybind11;
 
 
 const float BETWEEN_SIZE = 4;
-const float BETWEEN_WEIGHT = 0.3;
+const float BETWEEN_WEIGHT = 0.1;
 const float EACH_SIZE = 5;
-const float EACH_WEIGHT = 0.3;
+const float EACH_WEIGHT = 0.45;
 const float HORIZON_SIZE = 1;
 const float HORIZON_WEIGHT = 0.1;
 const float CAMERA_SIZE = 1;
-const float CAMERA_WEIGHT = 0.1;
+const float CAMERA_WEIGHT = 0.2;
 
 const float MAX_HAND_DISTANCE = 4;
-const float HAND_DIST_WEIGHT = 0.1;
+const float HAND_DIST_WEIGHT = 0.15;
+
+const float NO_MATCH_SCORE = 0.63;
 
 /*
 Calculates the distance between 2 gesture frames (which each represent 2 mediapipes hands), stored a np arrays of floats
@@ -46,7 +48,7 @@ double custom_distance_two_handed(py::array_t<float> frame1, py::array_t<float> 
     double total = 0.0;
 
     //LEFT HAND
-    if (!std::isnan(ptr1[0]) && !std::isnan(ptr2[0])){
+    if (!std::isnan(ptr1[0]) && !std::isnan(ptr2[0])){ //if both exist
         double distSum = std::fabs(ptr1[0] - ptr2[0]) + std::fabs(ptr1[1] - ptr2[1]) + 
                          std::fabs(ptr1[2] - ptr2[2]) + std::fabs(ptr1[3] - ptr2[3]);
         total += (distSum / BETWEEN_SIZE) * (BETWEEN_WEIGHT/2);
@@ -61,11 +63,13 @@ double custom_distance_two_handed(py::array_t<float> frame1, py::array_t<float> 
 
         double cameraSum = std::fabs(ptr1[10] - ptr2[10]);
         total += (cameraSum / CAMERA_SIZE) * (CAMERA_WEIGHT/2);
+    }else if (std::isnan(ptr1[0]) &&  std::isnan(ptr2[0])){ //if neither exist
+        total += 0;
     }else{ 
-        total += M_PI * (BETWEEN_WEIGHT/2);
-        total += M_PI * (EACH_WEIGHT/2);
-        total += M_PI * (HORIZON_WEIGHT/2);
-        total += M_PI * (CAMERA_WEIGHT/2);
+        total += NO_MATCH_SCORE * (BETWEEN_WEIGHT/2);
+        total += NO_MATCH_SCORE * (EACH_WEIGHT/2);
+        total += NO_MATCH_SCORE * (HORIZON_WEIGHT/2);
+        total += NO_MATCH_SCORE * (CAMERA_WEIGHT/2);
     }
 
     if (!std::isnan(ptr1[11]) && !std::isnan(ptr2[11])){
@@ -83,18 +87,20 @@ double custom_distance_two_handed(py::array_t<float> frame1, py::array_t<float> 
         
         double cameraSum = std::fabs(ptr1[21] - ptr2[21]);
         total += (cameraSum / CAMERA_SIZE) * (CAMERA_WEIGHT/2);
+    }else if (std::isnan(ptr1[11]) &&  std::isnan(ptr2[11])){ //if neither exist
+        total += 0;
     }else{
-        total += M_PI * (BETWEEN_WEIGHT/2);
-        total += M_PI * (EACH_WEIGHT/2);
-        total += M_PI * (HORIZON_WEIGHT/2);
-        total += M_PI * (CAMERA_WEIGHT/2);
+        total += NO_MATCH_SCORE * (BETWEEN_WEIGHT/2);
+        total += NO_MATCH_SCORE * (EACH_WEIGHT/2);
+        total += NO_MATCH_SCORE * (HORIZON_WEIGHT/2);
+        total += NO_MATCH_SCORE * (CAMERA_WEIGHT/2);
     }
 
     if (!std::isnan(ptr1[22]) && !std::isnan(ptr2[22])){
         double handDist = std::fabs(ptr1[22] - ptr2[22]);
         total += (handDist / MAX_HAND_DISTANCE) * (M_PI*HAND_DIST_WEIGHT);
     }else{
-        total += M_PI*HAND_DIST_WEIGHT;
+        total += NO_MATCH_SCORE*HAND_DIST_WEIGHT;
     }
 
     return total;
@@ -117,7 +123,7 @@ double custom_distance_one_handed(py::array_t<float> frame1, py::array_t<float> 
     double right_total = 0.0;
 
     //LEFT HAND
-    if (!std::isnan(ptr1[0]) && !std::isnan(ptr2[0])){
+    if (!std::isnan(ptr1[0]) && !std::isnan(ptr2[0])){ //if both hands exist
         double distSum = std::fabs(ptr1[0] - ptr2[0]) + std::fabs(ptr1[1] - ptr2[1]) + 
                          std::fabs(ptr1[2] - ptr2[2]) + std::fabs(ptr1[3] - ptr2[3]);
         left_total += (distSum / BETWEEN_SIZE) * (BETWEEN_WEIGHT);
@@ -132,14 +138,17 @@ double custom_distance_one_handed(py::array_t<float> frame1, py::array_t<float> 
 
         double cameraSum = std::fabs(ptr1[10] - ptr2[10]);
         left_total += (cameraSum / CAMERA_SIZE) * (CAMERA_WEIGHT);
-    }else{ 
-        left_total += M_PI * (BETWEEN_WEIGHT);
-        left_total += M_PI * (EACH_WEIGHT);
-        left_total += M_PI * (HORIZON_WEIGHT);
-        left_total += M_PI * (CAMERA_WEIGHT);
+    }else if (std::isnan(ptr1[0]) &&  std::isnan(ptr2[0])){ //if neither exist
+        left_total += 0;
+    }else{ //o/w
+        left_total += NO_MATCH_SCORE * (BETWEEN_WEIGHT);
+        left_total += NO_MATCH_SCORE * (EACH_WEIGHT);
+        left_total += NO_MATCH_SCORE * (HORIZON_WEIGHT);
+        left_total += NO_MATCH_SCORE * (CAMERA_WEIGHT);
     }
 
-    if (!std::isnan(ptr1[11]) && !std::isnan(ptr2[11])){
+    //RIGHT HAND
+    if (!std::isnan(ptr1[11]) && !std::isnan(ptr2[11])){ //if both hands exist
         double distSum = std::fabs(ptr1[11] - ptr2[11]) + std::fabs(ptr1[12] - ptr2[12]) + 
                          std::fabs(ptr1[13] - ptr2[13]) + std::fabs(ptr1[14] - ptr2[14]);
         right_total += (distSum / BETWEEN_SIZE) * (BETWEEN_WEIGHT);
@@ -154,11 +163,13 @@ double custom_distance_one_handed(py::array_t<float> frame1, py::array_t<float> 
         
         double cameraSum = std::fabs(ptr1[21] - ptr2[21]);
         right_total += (cameraSum / CAMERA_SIZE) * (CAMERA_WEIGHT);
-    }else{
-        right_total += M_PI * (BETWEEN_WEIGHT);
-        right_total += M_PI * (EACH_WEIGHT);
-        right_total += M_PI * (HORIZON_WEIGHT);
-        right_total += M_PI * (CAMERA_WEIGHT);
+    }else if (std::isnan(ptr1[11]) &&  std::isnan(ptr2[11])){ //if neither exist
+        right_total += 0;
+    }else{ //o/w
+        right_total += NO_MATCH_SCORE * (BETWEEN_WEIGHT);
+        right_total += NO_MATCH_SCORE * (EACH_WEIGHT);
+        right_total += NO_MATCH_SCORE * (HORIZON_WEIGHT);
+        right_total += NO_MATCH_SCORE * (CAMERA_WEIGHT);
     }
 
     return std::min(left_total, right_total);

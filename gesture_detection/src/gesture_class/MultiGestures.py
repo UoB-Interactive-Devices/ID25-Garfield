@@ -5,8 +5,8 @@ class MultiGestures:
     MultiGestures manages a collection of gestures for recognition
     and provides methods for matching input recordings against known gestures.
     """
-    def __init__(self):
-        self.gestures = []
+    def __init__(self, gestures):
+        self.gestures = gestures
     
     def load_gesture(self, filepath):
         """Load a gesture from a JSON file and add it to the collection"""

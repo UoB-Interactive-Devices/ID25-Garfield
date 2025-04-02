@@ -22,7 +22,7 @@ def record_gesture(name, filename, one_handed=False):
     drawing = mp.solutions.drawing_utils
     hands = hands_model.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5, max_num_hands=2)
     
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture(2)
     cv2.namedWindow('Gesture Capture', cv2.WINDOW_GUI_NORMAL)
     
     gesture = Gesture(name, one_handed=one_handed)
@@ -63,13 +63,13 @@ def record_gesture(name, filename, one_handed=False):
                 print("STOPPED recording")
                 is_recording = False
             else:
-                print("Recording in: " + str(COUNT_DOWN))
-                for i in range(COUNT_DOWN, 0, -1):
-                    time.sleep(1)
-                    print(i)
+                # print("Recording in: " + str(COUNT_DOWN))
+                # for i in range(COUNT_DOWN, 0, -1):
+                #     time.sleep(1)
+                #     print(i)
                 print("STARTED recording!")
                 is_recording = True
-        n
+        
         # maintain FPS
         elapsed_frame = time.time() - frame_start
         time.sleep(max(0, FRAME_TIME - elapsed_frame))

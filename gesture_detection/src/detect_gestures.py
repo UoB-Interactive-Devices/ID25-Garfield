@@ -10,7 +10,7 @@ from gesture_class.MultiGestures import MultiGestures
 # Constants
 FPS = 15
 FRAME_TIME = 1.0 / FPS
-SECONDS_ANALYZED = 1.5
+SECONDS_ANALYZED = 1
 
 # Global variables for initialization
 all_gestures = {}
@@ -40,7 +40,7 @@ def initialize_capture():
     global video_capture, recording
     
     if video_capture is None or not video_capture.isOpened():
-        video_capture = cv2.VideoCapture(0)
+        video_capture = cv2.VideoCapture(2)
         cv2.namedWindow('Gesture Capture', cv2.WINDOW_GUI_NORMAL)
         cv2.resizeWindow('Gesture Capture', 960, 720)
     
@@ -148,18 +148,16 @@ def detect_gestures(multi_gesture, gesture_scores, gesture_periods, detect_perio
 def detect_signs(gestures, detect_period=None):
     gesture_scores = {
         "null" : -1,
-        "exit" : 3.9,
-        "repeat" : -1,
-        "teacher" : 1,
-        "how_are_you": 0.4,
-        "robot" : 5                  
+        "exit" : 3.7, #/
+        "teacher" : 5.5, #/
+        "how_are_you": 4.2,
+        "robot" : -1                 
     }
     gesture_periods = {
         "null" : 10,
-        "exit" : 10,
-        "repeat" : 10,
-        "teacher" : 10,
-        "how_are_you": 10,
+        "exit" : 0.2,
+        "teacher" : 0.2,
+        "how_are_you": 0.2,
         "robot" : 501                   
     }
     
@@ -171,6 +169,6 @@ def detect_signs(gestures, detect_period=None):
 if __name__ == "__main__":
     # Example: detect signs with their threshold scores and required periods
     # Format: (gesture_name, max_score_threshold, period_in_seconds)
-    gestures = ["null", "exit", "teacher", "how_are_you"]
+    gestures = [ "exit", "how_are_you"]
     result = detect_signs(gestures, None)  # Run indefinitely
     print(f"Detection result: {result}")
